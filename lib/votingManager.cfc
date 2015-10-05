@@ -1,5 +1,5 @@
 <!---
-   Copyright 2011 Blue River Interactive
+   Copyright 2010-2015 Blue River Interactive
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -34,16 +34,16 @@
 		<!--- set the voting DAO and store into mem --->
 		<cfset pluginConfig.getApplication().setValue( "votingDAO", votingDAO ) />
 
-		<!--- loop over assigned sites and add in portal subtype --->
+		<!--- loop over assigned sites and add in folder subtype --->
 		<cfloop query="assignedSites">
 
 			<!--- ****************************** --->
-			<!--- CREATE PORTAL/VOTING SUBTYPE --->
+			<!--- CREATE FOLDER/VOTING SUBTYPE --->
 			<!--- ****************************** --->
 			<cfscript>
-				// create the voter portal subtype
+				// create the voter folder subtype
 				subType = application.classExtensionManager.getSubTypeBean();
-				subType.setType( "Portal" );
+				subType.setType( "Folder" );
 				subType.setSubType( "Voting" );
 				subType.setSiteID( assignedSites.siteId );
 				subType.load();
@@ -121,7 +121,7 @@
 
 	</cffunction>
 
-	<cffunction name="onPortalVotingBodyRender" returntype="any" output="false">
+	<cffunction name="onFolderVotingBodyRender" returntype="any" output="false">
 		<cfargument name="$" />
 
 		<cfset var votingPages = "" />
@@ -167,7 +167,7 @@
 			</cfif>
 
 			<!--- get voting page details --->
-			<cfset votingPages = pluginConfig.getApplication().getValue( "votingDAO" ).getVotingPortalPages(
+			<cfset votingPages = pluginConfig.getApplication().getValue( "votingDAO" ).getVotingFolderPages(
 				siteId: $.event( "siteId" ),
 				parentId: $.content("contentID"),
 				voteStatus: $.event( "voteStatus" ),
@@ -180,7 +180,7 @@
 			<!--- header --->
 			<cfsavecontent variable="headerBody">
 				<cfoutput>
-					<!--- records found in portal 
+					<!--- records found in folder
 					<div id="#ns#totalPagesFound">
 						<p><span>#votingPages.getRecordcount()#</span> Pages found!</p>
 					</div>
